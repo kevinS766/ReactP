@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [task, setTask] = useState('');
+  const [tasks, setTasks] = useState([]);
+
+  const handleAddTask = () => {
+    if (task.trim() === '') return;
+    setTasks([...tasks, task]);
+    setTask('');
+  };
+
+  const handleDeleteTask = (taskToDelete) => {
+    setTasks(tasks.filter((t) => t !== taskToDelete));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='bg-slate-700 min-h-screen text-white font-semibold flex flex-col items-center space-y-10 p-4'>
+      <header className="text-6xl">Mi Todo List</header>
+      <div className='flex space-x-2'>
+      <input
+        type="text"
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+        placeholder="Añadir tarea"
+        className='bg-slate-900 text-white p-2 rounded max-w-md w-[600px]'
+      />
+      <button 
+      onClick={handleAddTask}
+      className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+      >Añadir</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <ul className='p-4 rounded w-[600px]'>
+        {tasks.map((task, index) => (
+          <li key={index} 
+          className='flex justify-between items-center p-2 bg-slate-800 rounded my-2'>
+            {task}
+            <button 
+            onClick={() => handleDeleteTask(task)}
+            className='bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded'
+            >Eliminar</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
-export default App
+export default App;

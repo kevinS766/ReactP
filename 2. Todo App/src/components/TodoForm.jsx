@@ -1,4 +1,6 @@
 import React from 'react';
+import { IoIosAdd } from "react-icons/io";
+
 
 export const TodoForm = ({ addTask, taskText, setTaskText }) => {
   const handleSubmit = (e) => {
@@ -17,7 +19,7 @@ export const TodoForm = ({ addTask, taskText, setTaskText }) => {
       />
       <button 
       type="submit"
-      className='bg-slate-600 text-white p-2 rounded'>Agregar</button>
+      className='bg-slate-600 text-white p-2 rounded'> <IoIosAdd className='text-2xl'/> </button>
     </form>
   );
 };

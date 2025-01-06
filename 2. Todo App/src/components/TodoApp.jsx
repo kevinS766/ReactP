@@ -31,7 +31,7 @@ const TodoApp = () => {
 
   return (
     <div className='bg-slate-800 h-auto min-h-screen space-y-9'>
-      <header className='text-5xl text-white flex justify-center font-semibold' >Mis tareas</header>
+      <header className='text-6xl text-white flex justify-center font-semibold pt-5' >Mis tareas</header>
       <TodoForm 
         addTask={addTask} 
         taskText={taskText} 

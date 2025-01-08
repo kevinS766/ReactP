@@ -1,35 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState } from 'react';
 import './App.css'
+import { LiaTimesSolid } from "react-icons/lia";
+import { GiCircle } from "react-icons/gi";
+import { winningCombinations } from './winningCombinations';
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [Board, setBoard] = useState(Array(9).fill(null));
+  const [player, setPlayer] = useState("X");
+  const [winner, setWinner] = useState(null);
+
+  const handleTurn = () => {
+    setPlayer((prevPlayer) => (prevPlayer === "X" ? "O" : "X"));
+  };
+
+  const handleClick = (index) => {
+    if (Board[index] || winner) return;
+
+    const newBoard = [...Board];
+    newBoard[index] = player;
+    setBoard(newBoard)
+
+    const detectWinner = checkWinner(newBoard);
+    if (detectWinner) {
+      setWinner(detectWinner);
+    } else {
+      handleTurn();
+    }
+  };
+
+  const checkWinner = (board) => {
+     for (let combination of winningCombinations) {
+      const [a, b, c] = combination;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        return board[a];
+      }
+     }
+      return null;
+  };
+
+  const resetGame = () => {
+    setBoard(Array(9).fill(null))
+    setPlayer("X");
+    setWinner(null);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className='game-container'>
+      <h1>Tic Tac Toe App</h1>
+      {winner ? (
+        <div className='winner'>
+          !Jugador {winner} ha ganado!
+          <button onClick={resetGame}>Reiniciar</button>
+        </div>
+        
+      ) : (
+        <div className='board'>
+          {Board.map((value, index) => (
+            <button
+              key={index}
+              className='cell'
+              onClick={() => handleClick(index)}
+            >
+              {value === "X" ? <LiaTimesSolid /> : value === "O" ? <GiCircle /> : ""}
+            </button>
+          ))}
+        </div>
+      )}
+      {!winner && !Board.includes(null) && (
+        <div className='draw'>
+          !Es un empate!
+          <button onClick={resetGame}>Reiniciar</button>
+        </div>
+      )}
+    </div>
+  );  
 }
 
 export default App
